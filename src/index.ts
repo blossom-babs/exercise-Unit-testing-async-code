@@ -1,18 +1,43 @@
-import addFunc from './controller/add';
-console.log(addFunc(6, 7));
+import axios from 'axios';
 
-// a text editor function
-export const textEditor = (word: string): string => {
-  const newWord = word.split(' ');
-  let i = 0;
-  while (i < newWord.length) {
-    if (newWord[i] === 'movie') {
-      newWord[i] = 'film';
-    }
-    i++;
-  }
-
-  return newWord.join(' ');
+// get all countries
+export const getAllCountries = async () => {
+  const result = await axios.get('https://restcountries.com/v3.1/all');
+  return result.data;
 };
 
-textEditor('The movie that just came out is a phenomenal movie');
+// get countries by region
+export const getCountriesByRegion = async (
+  region: string
+): Promise<string[] | void> => {
+  let countriesList = new Array();
+  try {
+    const countries = await axios.get(
+      `https://restcountries.com/v3.1/region/${region}`
+    );
+    for (let item of countries.data) {
+      countriesList.push(item.name.common);
+    }
+    return countriesList;
+  } catch (error) {
+    console.log(error);
+  }
+};
+
+// get countries by name
+export const getCountriesByName = async (
+  country: string
+): Promise<[] | void> => {
+  try {
+    const countryInfo = await axios.get(
+      `https://restcountries.com/v3.1/name/${country}?fullText=true`
+    );
+    return countryInfo.data;
+  } catch (error) {
+    console.log(error);
+  }
+};
+
+//getAllCountries();
+//getCountriesByRegion('Africa').then((data) => console.log(data));
+// getCountriesByName('Nigeria').then((data) => console.log(data));
