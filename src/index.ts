@@ -10,12 +10,12 @@ export const getAllCountries = async () => {
 export const getCountriesByRegion = async (
   region: string
 ): Promise<string[] | void> => {
-  let countriesList = new Array();
+  const countriesList = [];
   try {
     const countries = await axios.get(
       `https://restcountries.com/v3.1/region/${region}`
     );
-    for (let item of countries.data) {
+    for (const item of countries.data) {
       countriesList.push(item.name.common);
     }
     return countriesList;
